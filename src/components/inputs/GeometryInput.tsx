@@ -66,7 +66,7 @@ export function GeometryInput({
         />
 
         <PresetDropdown
-          label="Thermal Mass"
+          label="Specific Heat Capacity"
           presets={materialPresets}
           value={specificHeat}
           onChange={onSpecificHeatChange}

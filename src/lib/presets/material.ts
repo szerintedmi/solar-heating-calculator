@@ -35,8 +35,14 @@ export const materialPresets: PresetCollection = [
     description: "Various woods",
     range: { min: 1500, max: 2500 },
   },
+  {
+    label: "Human tissue",
+    value: 3500,
+    description: "Skin, muscle",
+    range: { min: 3400, max: 3600 },
+  },
 ];
 
 export const materialHelperText = "Materials with higher heat capacity take longer to heat up.";
 
-export const defaultSpecificHeat = 500;
+export const defaultSpecificHeat = 1500;
