@@ -6,3 +6,4 @@ export * from "./convection";
 export * from "./material";
 export * from "./ndFilters";
 export * from "./geometry";
+export * from "./irradiance";

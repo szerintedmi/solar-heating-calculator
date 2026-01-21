@@ -1,5 +1,11 @@
 import { Card, NumberInput, PresetSelect } from "@/components/ui";
-import { kFactorHelperText, kFactorPresets, ndFilterPresets } from "@/lib/presets";
+import {
+  irradianceHelperText,
+  irradiancePresets,
+  kFactorHelperText,
+  kFactorPresets,
+  ndFilterPresets,
+} from "@/lib/presets";
 import type { LightInputMode, LightInput as LightInputType } from "@/lib/thermal";
 
 interface LightInputProps {
@@ -50,13 +56,15 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
 
       {/* Mode-specific inputs */}
       {mode === "direct" && (
-        <NumberInput
+        <PresetSelect
           label="Irradiance"
+          presets={irradiancePresets}
           value={irradiance}
           onChange={(v) => onChange({ irradiance: v })}
           unit="W/m²"
-          min={0}
           step={10}
+          min={0}
+          helpText={irradianceHelperText}
         />
       )}
 
