@@ -76,6 +76,18 @@ export interface CalculationResult {
 export type LightInputMode = "direct" | "lux" | "lux-nd";
 
 /**
+ * Reflection input for mirrors/reflectors
+ */
+export interface ReflectionInput {
+  /** Whether reflection is enabled */
+  enabled: boolean;
+  /** Reflectance percentage (0-100) */
+  reflectance: number;
+  /** Number of reflectors */
+  numReflectors: number;
+}
+
+/**
  * Light input state based on mode
  */
 export interface LightInput {
@@ -88,4 +100,6 @@ export interface LightInput {
   kFactor: number;
   /** ND filter attenuation factors */
   ndFilters: number[];
+  /** Optional reflection from mirrors */
+  reflection: ReflectionInput;
 }

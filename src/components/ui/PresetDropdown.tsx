@@ -70,7 +70,8 @@ export function PresetDropdown({
   // Format option text with value and description
   const formatOption = (preset: Preset) => {
     const desc = preset.description ? ` — ${preset.description}` : "";
-    return `${preset.label} (${preset.value})${desc}`;
+    const unitSuffix = unit ? unit : "";
+    return `${preset.label} (${preset.value}${unitSuffix})${desc}`;
   };
 
   return (
@@ -89,7 +90,8 @@ export function PresetDropdown({
       >
         {isCustom && (
           <option value="" disabled>
-            Custom ({value})
+            Custom ({value}
+            {unit ?? ""})
           </option>
         )}
         {presets.map((preset) => (

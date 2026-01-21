@@ -7,3 +7,4 @@ export * from "./material";
 export * from "./ndFilters";
 export * from "./geometry";
 export * from "./irradiance";
+export * from "./reflectance";

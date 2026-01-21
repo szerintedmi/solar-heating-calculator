@@ -3,6 +3,7 @@ import {
   defaultConvection,
   defaultEmissivity,
   defaultKFactor,
+  defaultReflectance,
   defaultSpecificHeat,
 } from "@/lib/presets";
 import { defaultArea, defaultMass, defaultThickness } from "@/lib/presets/geometry";
@@ -37,6 +38,11 @@ const initialState: CalculatorState = {
     lux: 100000,
     kFactor: defaultKFactor,
     ndFilters: [],
+    reflection: {
+      enabled: false,
+      reflectance: defaultReflectance,
+      numReflectors: 1,
+    },
   },
   absorptivity: defaultAbsorptivity,
   emissivity: defaultEmissivity,
@@ -56,16 +62,29 @@ export function useCalculator() {
 
   // Compute effective irradiance based on light input mode
   const computedIrradiance = useMemo(() => {
+    // Get base irradiance from mode
+    let baseIrradiance: number;
     switch (light.mode) {
       case "direct":
-        return light.irradiance;
+        baseIrradiance = light.irradiance;
+        break;
       case "lux":
-        return luxToIrradiance(light.lux, light.kFactor);
+        baseIrradiance = luxToIrradiance(light.lux, light.kFactor);
+        break;
       case "lux-nd":
-        return luxWithNDToIrradiance(light.lux, light.ndFilters, light.kFactor);
+        baseIrradiance = luxWithNDToIrradiance(light.lux, light.ndFilters, light.kFactor);
+        break;
       default:
-        return light.irradiance;
+        baseIrradiance = light.irradiance;
     }
+
+    // Apply reflection multiplier if enabled
+    if (light.reflection.enabled) {
+      const reflectanceDecimal = light.reflection.reflectance / 100;
+      return baseIrradiance * reflectanceDecimal * light.reflection.numReflectors;
+    }
+
+    return baseIrradiance;
   }, [light]);
 
   // Convert user-friendly units to SI units
