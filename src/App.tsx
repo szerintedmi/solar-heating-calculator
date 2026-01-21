@@ -1,5 +1,5 @@
 import { EnvironmentInput, GeometryInput, LightInput, SurfaceInput } from "@/components/inputs";
-import { Assumptions, CalculationExplainer, Header } from "@/components/layout";
+import { Assumptions, CalculationExplainer, Formulas, Header } from "@/components/layout";
 import { ResultsDisplay, TemperatureChart } from "@/components/outputs";
 import { useCalculator } from "@/hooks/useCalculator";
 
@@ -58,6 +58,7 @@ export function App() {
 
             <CalculationExplainer />
             <Assumptions />
+            <Formulas />
           </div>
         </div>
 
