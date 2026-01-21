@@ -27,4 +27,4 @@ export const defaultThickness = 0.01; // 1 cm
 /**
  * Mass presets (kg)
  */
-export const defaultMass = 0.1; // 100g
+export const defaultMass = 0.01; // 10g
