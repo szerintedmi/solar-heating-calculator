@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import { type ChangeEvent, type FocusEvent, useEffect, useState } from "react";
 
 interface NumberInputProps {
   label: string;
@@ -7,7 +7,6 @@ interface NumberInputProps {
   unit?: string;
   min?: number;
   max?: number;
-  step?: number;
   id?: string;
   helpText?: string;
 }
@@ -19,16 +18,40 @@ export function NumberInput({
   unit,
   min,
   max,
-  step = 1,
   id,
   helpText,
 }: NumberInputProps) {
   const inputId = id || label.toLowerCase().replace(/\s+/g, "-");
+  const [inputValue, setInputValue] = useState(String(value));
+
+  // Sync internal state when external value changes
+  useEffect(() => {
+    setInputValue(String(value));
+  }, [value]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number.parseFloat(e.target.value);
-    if (!Number.isNaN(newValue)) {
-      onChange(newValue);
+    const raw = e.target.value;
+    setInputValue(raw);
+
+    // Update parent if valid number
+    const parsed = Number.parseFloat(raw);
+    if (!Number.isNaN(parsed)) {
+      onChange(parsed);
+    }
+  };
+
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const parsed = Number.parseFloat(e.target.value);
+    if (Number.isNaN(parsed)) {
+      // Reset to last valid value
+      setInputValue(String(value));
+    } else {
+      // Clamp to min/max and format
+      let clamped = parsed;
+      if (min !== undefined) clamped = Math.max(min, clamped);
+      if (max !== undefined) clamped = Math.min(max, clamped);
+      onChange(clamped);
+      setInputValue(String(clamped));
     }
   };
 
@@ -39,13 +62,12 @@ export function NumberInput({
         {unit && <span className="input-unit ml-1">({unit})</span>}
       </label>
       <input
-        type="number"
+        type="text"
+        inputMode="decimal"
         id={inputId}
-        value={value}
+        value={inputValue}
         onChange={handleChange}
-        min={min}
-        max={max}
-        step={step}
+        onBlur={handleBlur}
         className="input-field font-mono"
       />
       {helpText && <p className="mt-1 text-xs text-neutral-500">{helpText}</p>}

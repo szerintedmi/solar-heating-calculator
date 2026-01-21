@@ -64,7 +64,6 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
           value={irradiance}
           onChange={(v) => onChange({ irradiance: v })}
           unit="W/m²"
-          step={10}
           min={0}
           helpText={irradianceHelperText}
         />
@@ -102,7 +101,6 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
             onChange={(v) => onChange({ lux: v })}
             unit="lux"
             min={0}
-            step={100}
           />
 
           <PresetDropdown
@@ -111,7 +109,6 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
             value={kFactor}
             onChange={(v) => onChange({ kFactor: v })}
             unit="lux per W/m²"
-            step={1}
             min={1}
             helpText={kFactorHelperText}
           />
@@ -172,7 +169,6 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
                 })
               }
               unit="%"
-              step={1}
               min={0}
               max={100}
               helpText={reflectanceHelperText}
@@ -190,7 +186,6 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
                 })
               }
               min={1}
-              step={1}
             />
 
             {/* Reflection multiplier display */}

@@ -1,4 +1,5 @@
 import type { Preset } from "@/lib/presets";
+import { useEffect, useState } from "react";
 
 interface PresetSelectProps {
   label: string;
@@ -6,7 +7,6 @@ interface PresetSelectProps {
   value: number;
   onChange: (value: number) => void;
   unit?: string;
-  step?: number;
   helpText?: string;
   min?: number;
   max?: number;
@@ -18,15 +18,43 @@ export function PresetSelect({
   value,
   onChange,
   unit,
-  step = 0.01,
   helpText,
   min,
   max,
 }: PresetSelectProps) {
   const inputId = label.toLowerCase().replace(/\s+/g, "-");
+  const [inputValue, setInputValue] = useState(String(value));
+
+  // Sync internal state when external value changes
+  useEffect(() => {
+    setInputValue(String(value));
+  }, [value]);
 
   // Find matching preset (if any)
   const activePreset = presets.find((p) => Math.abs(p.value - value) < 0.001);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    setInputValue(raw);
+
+    const parsed = Number.parseFloat(raw);
+    if (!Number.isNaN(parsed)) {
+      onChange(parsed);
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const parsed = Number.parseFloat(e.target.value);
+    if (Number.isNaN(parsed)) {
+      setInputValue(String(value));
+    } else {
+      let clamped = parsed;
+      if (min !== undefined) clamped = Math.max(min, clamped);
+      if (max !== undefined) clamped = Math.min(max, clamped);
+      onChange(clamped);
+      setInputValue(String(clamped));
+    }
+  };
 
   return (
     <div className="space-y-2">
@@ -52,16 +80,12 @@ export function PresetSelect({
 
       {/* Direct input */}
       <input
-        type="number"
+        type="text"
+        inputMode="decimal"
         id={inputId}
-        value={value}
-        onChange={(e) => {
-          const v = Number.parseFloat(e.target.value);
-          if (!Number.isNaN(v)) onChange(v);
-        }}
-        min={min}
-        max={max}
-        step={step}
+        value={inputValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
         className="input-field font-mono"
       />
 

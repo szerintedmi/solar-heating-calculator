@@ -26,7 +26,6 @@ export function EnvironmentInput({
           value={convectionCoeff}
           onChange={onConvectionChange}
           unit="W/(m²·K)"
-          step={1}
           min={1}
           helpText={convectionHelperText}
         />
@@ -36,7 +35,6 @@ export function EnvironmentInput({
           value={ambientTempCelsius}
           onChange={onAmbientTempChange}
           unit="°C"
-          step={1}
           helpText="The temperature of the surrounding air. Heat flows from hot to cold."
         />
       </div>

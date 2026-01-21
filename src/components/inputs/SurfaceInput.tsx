@@ -30,7 +30,6 @@ export function SurfaceInput({
           presets={absorptivityPresets}
           value={absorptivity}
           onChange={onAbsorptivityChange}
-          step={0.01}
           min={0}
           max={1}
           helpText={absorptivityHelperText}
@@ -41,7 +40,6 @@ export function SurfaceInput({
           presets={emissivityPresets}
           value={emissivity}
           onChange={onEmissivityChange}
-          step={0.01}
           min={0}
           max={1}
           helpText={emissivityHelperText}

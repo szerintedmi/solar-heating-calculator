@@ -42,7 +42,6 @@ export function GeometryInput({
             onChange={onAreaChange}
             unit="cm²"
             min={0.1}
-            step={1}
           />
 
           <NumberInput
@@ -51,7 +50,6 @@ export function GeometryInput({
             onChange={onThicknessChange}
             unit="mm"
             min={0.1}
-            step={1}
           />
         </div>
 
@@ -61,7 +59,6 @@ export function GeometryInput({
           onChange={onMassChange}
           unit="g"
           min={0.1}
-          step={1}
           helpText="Heavier objects take longer to heat up but also hold more heat."
         />
 
@@ -71,7 +68,6 @@ export function GeometryInput({
           value={specificHeat}
           onChange={onSpecificHeatChange}
           unit="J/(kg·K)"
-          step={10}
           min={100}
           helpText={materialHelperText}
         />

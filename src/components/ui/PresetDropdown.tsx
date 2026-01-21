@@ -1,5 +1,5 @@
 import type { Preset } from "@/lib/presets";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface PresetDropdownProps {
   label: string;
@@ -7,7 +7,6 @@ interface PresetDropdownProps {
   value: number;
   onChange: (value: number) => void;
   unit?: string;
-  step?: number;
   helpText?: string;
   min?: number;
   max?: number;
@@ -19,13 +18,18 @@ export function PresetDropdown({
   value,
   onChange,
   unit,
-  step = 0.01,
   helpText,
   min,
   max,
 }: PresetDropdownProps) {
   const inputId = label.toLowerCase().replace(/\s+/g, "-");
   const selectId = `${inputId}-preset`;
+  const [inputValue, setInputValue] = useState(String(value));
+
+  // Sync internal state when external value changes
+  useEffect(() => {
+    setInputValue(String(value));
+  }, [value]);
 
   // Track selection: preset label or "__custom__" for explicit custom mode
   const [selection, setSelection] = useState<string>(() => {
@@ -61,9 +65,25 @@ export function PresetDropdown({
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = Number.parseFloat(e.target.value);
-    if (!Number.isNaN(v)) {
-      onChange(v);
+    const raw = e.target.value;
+    setInputValue(raw);
+
+    const parsed = Number.parseFloat(raw);
+    if (!Number.isNaN(parsed)) {
+      onChange(parsed);
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const parsed = Number.parseFloat(e.target.value);
+    if (Number.isNaN(parsed)) {
+      setInputValue(String(value));
+    } else {
+      let clamped = parsed;
+      if (min !== undefined) clamped = Math.max(min, clamped);
+      if (max !== undefined) clamped = Math.min(max, clamped);
+      onChange(clamped);
+      setInputValue(String(clamped));
     }
   };
 
@@ -98,13 +118,12 @@ export function PresetDropdown({
 
       {/* Direct numeric input - only shown when Custom is selected */}
       <input
-        type="number"
+        type="text"
+        inputMode="decimal"
         id={inputId}
-        value={value}
+        value={inputValue}
         onChange={handleInputChange}
-        min={min}
-        max={max}
-        step={step}
+        onBlur={handleBlur}
         className={`input-field font-mono ${isCustom ? "" : "hidden"}`}
         aria-label={`${label} custom value`}
       />
