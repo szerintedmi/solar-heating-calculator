@@ -27,4 +27,4 @@ export const kFactorPresets: PresetCollection = [
 export const kFactorHelperText =
   "K factor for London daylight. Summer has bluer spectrum (higher K), winter has redder spectrum (lower K). Expect ±20% uncertainty without calibration.";
 
-export const defaultKFactor = 100;
+export const defaultKFactor = 115;

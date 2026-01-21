@@ -2,6 +2,7 @@ import {
   defaultAbsorptivity,
   defaultConvection,
   defaultEmissivity,
+  defaultIrradiance,
   defaultKFactor,
   defaultReflectance,
   defaultSpecificHeat,
@@ -34,7 +35,7 @@ interface CalculatorState {
 const initialState: CalculatorState = {
   light: {
     mode: "direct",
-    irradiance: 1000,
+    irradiance: defaultIrradiance,
     lux: 100000,
     kFactor: defaultKFactor,
     ndFilters: [],

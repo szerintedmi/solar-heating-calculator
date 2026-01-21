@@ -1,4 +1,4 @@
-import { Card, NumberInput, PresetDropdown, PresetSelect } from "@/components/ui";
+import { Card, NumberInput, PresetDropdown } from "@/components/ui";
 import {
   irradianceHelperText,
   irradiancePresets,
@@ -58,7 +58,7 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
 
       {/* Mode-specific inputs */}
       {mode === "direct" && (
-        <PresetSelect
+        <PresetDropdown
           label="Irradiance"
           presets={irradiancePresets}
           value={irradiance}
@@ -105,7 +105,7 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
             step={100}
           />
 
-          <PresetSelect
+          <PresetDropdown
             label="K Factor"
             presets={kFactorPresets}
             value={kFactor}

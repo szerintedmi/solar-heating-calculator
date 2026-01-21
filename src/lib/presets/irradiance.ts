@@ -27,4 +27,4 @@ export const irradiancePresets: PresetCollection = [
 export const irradianceHelperText =
   "Seasonal sunlight intensity in London at noon. Actual values depend on time of day, clouds, and surface angle.";
 
-export const defaultIrradiance = 1000;
+export const defaultIrradiance = 950;
