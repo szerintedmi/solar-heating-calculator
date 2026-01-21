@@ -1,2 +1,30 @@
-.history
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# IDE and editor
+.history/
 .DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Lock files (using bun)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
