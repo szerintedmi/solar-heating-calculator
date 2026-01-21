@@ -60,6 +60,8 @@ export interface TransientResult {
   time90: number;
   /** Time to reach 95% of temperature rise in seconds */
   time95: number;
+  /** Time to reach 99% of temperature rise in seconds */
+  time99: number;
 }
 
 /**

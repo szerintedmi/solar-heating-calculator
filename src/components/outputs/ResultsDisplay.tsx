@@ -32,6 +32,15 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
   const { equilibrium, transient } = results;
 
   const tempCelsius = equilibrium.temperature - CELSIUS_TO_KELVIN;
+  const ambientCelsius = transient.timeSeries[0].temperature - CELSIUS_TO_KELVIN;
+  const tempRise = tempCelsius - ambientCelsius;
+
+  // Calculate milestone temperatures
+  const temp50 = ambientCelsius + tempRise * 0.5;
+  const temp90 = ambientCelsius + tempRise * 0.9;
+  const temp95 = ambientCelsius + tempRise * 0.95;
+  const temp99 = ambientCelsius + tempRise * 0.99;
+
   const convectionPct =
     equilibrium.totalLoss > 0
       ? ((equilibrium.convectionLoss / equilibrium.totalLoss) * 100).toFixed(0)
@@ -55,34 +64,37 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
   return (
     <Card title="Results">
       <div className="space-y-4">
-        {/* Equilibrium temperature - main result */}
-        <div className="p-4 bg-neutral-800 rounded-lg text-center">
-          <p className="text-sm text-neutral-400 mb-1">Equilibrium Temperature</p>
-          <p className="text-4xl font-mono font-semibold text-neutral-100">
-            {tempCelsius.toFixed(1)}°C
-          </p>
-          <p className="text-xs text-neutral-500 mt-1">{equilibrium.temperature.toFixed(1)} K</p>
+        {/* Temperature milestones */}
+        <div className="p-3 bg-neutral-800 rounded-lg space-y-2">
+          {[
+            { temp: temp50, label: "50%", time: transient.time50 },
+            { temp: temp90, label: "90%", time: transient.time90 },
+            { temp: temp95, label: "95%", time: transient.time95 },
+            { temp: temp99, label: "99%", time: transient.time99 },
+          ].map(({ temp, label, time }) => (
+            <div key={label} className="flex items-baseline gap-2">
+              <span className="font-mono text-lg text-neutral-100">{temp.toFixed(1)}°C</span>
+              <span className="text-xs text-neutral-500">{label}</span>
+              <span className="text-neutral-600 text-xs">•</span>
+              <span className="font-mono text-sm text-neutral-400">{formatTime(time)}</span>
+            </div>
+          ))}
+          <div className="flex items-baseline gap-2 pt-1 border-t border-neutral-700">
+            <span className="font-mono text-xl font-semibold text-neutral-100">
+              {tempCelsius.toFixed(1)}°C
+            </span>
+            <span className="text-xs text-neutral-400">Equilibrium</span>
+          </div>
         </div>
 
-        {/* Power breakdown */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 bg-neutral-800 rounded-lg">
-            <p className="text-xs text-neutral-500">Absorbed Power</p>
-            <p className="text-lg font-mono text-neutral-100">
+        {/* Heat loss breakdown */}
+        <div className="p-3 bg-neutral-800 rounded-lg">
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-xs text-neutral-500">Heat Loss Breakdown</p>
+            <p className="text-sm font-mono text-neutral-300">
               {formatPower(equilibrium.absorbedPower)}
             </p>
           </div>
-          <div className="p-3 bg-neutral-800 rounded-lg">
-            <p className="text-xs text-neutral-500">Total Loss</p>
-            <p className="text-lg font-mono text-neutral-100">
-              {formatPower(equilibrium.totalLoss)}
-            </p>
-          </div>
-        </div>
-
-        {/* Loss mechanism breakdown */}
-        <div className="p-3 bg-neutral-800 rounded-lg">
-          <p className="text-xs text-neutral-500 mb-2">Heat Loss Breakdown</p>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-neutral-300">Convection (air)</span>
@@ -143,25 +155,6 @@ export function ResultsDisplay({ results }: ResultsDisplayProps) {
             {regime === "low" &&
               "At lower temperatures, convection (air movement) is the main cooling mechanism."}
           </p>
-        </div>
-
-        {/* Time milestones */}
-        <div className="p-3 bg-neutral-800 rounded-lg">
-          <p className="text-xs text-neutral-500 mb-2">Time to Reach Temperature</p>
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div>
-              <p className="text-xs text-neutral-500">50%</p>
-              <p className="font-mono text-neutral-100">{formatTime(transient.time50)}</p>
-            </div>
-            <div>
-              <p className="text-xs text-neutral-500">90%</p>
-              <p className="font-mono text-neutral-100">{formatTime(transient.time90)}</p>
-            </div>
-            <div>
-              <p className="text-xs text-neutral-500">95%</p>
-              <p className="font-mono text-neutral-100">{formatTime(transient.time95)}</p>
-            </div>
-          </div>
         </div>
       </div>
     </Card>

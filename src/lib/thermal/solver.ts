@@ -159,6 +159,7 @@ export function simulateTransient(inputs: ThermalInputs, equilibriumTemp: number
       time50: 0,
       time90: 0,
       time95: 0,
+      time99: 0,
     };
   }
 
@@ -170,6 +171,7 @@ export function simulateTransient(inputs: ThermalInputs, equilibriumTemp: number
   const target50 = ambientTemp + temperatureRise * 0.5;
   const target90 = ambientTemp + temperatureRise * 0.9;
   const target95 = ambientTemp + temperatureRise * 0.95;
+  const target99 = ambientTemp + temperatureRise * 0.99;
 
   const fullTimeSeries: TimePoint[] = [];
   let temperature = ambientTemp;
@@ -177,9 +179,11 @@ export function simulateTransient(inputs: ThermalInputs, equilibriumTemp: number
   let time50 = 0;
   let time90 = 0;
   let time95 = 0;
+  let time99 = 0;
   let found50 = false;
   let found90 = false;
   let found95 = false;
+  let found99 = false;
 
   // Run simulation
   while (time <= simulationTime) {
@@ -198,9 +202,13 @@ export function simulateTransient(inputs: ThermalInputs, equilibriumTemp: number
       time95 = time;
       found95 = true;
     }
+    if (!found99 && temperature >= target99) {
+      time99 = time;
+      found99 = true;
+    }
 
     // Stop early if we've reached equilibrium
-    if (found95 && Math.abs(temperature - equilibriumTemp) < 0.01) {
+    if (found99 && Math.abs(temperature - equilibriumTemp) < 0.01) {
       // Add a few more points at equilibrium for visual completeness
       for (let i = 1; i <= 3; i++) {
         const extraTime = time + (simulationTime - time) * (i / 3);
@@ -223,12 +231,14 @@ export function simulateTransient(inputs: ThermalInputs, equilibriumTemp: number
   if (!found50) time50 = simulationTime;
   if (!found90) time90 = simulationTime;
   if (!found95) time95 = simulationTime;
+  if (!found99) time99 = simulationTime;
 
   return {
     timeSeries,
     time50,
     time90,
     time95,
+    time99,
   };
 }
 
