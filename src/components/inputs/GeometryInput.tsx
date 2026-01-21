@@ -1,4 +1,4 @@
-import { Card, NumberInput, PresetSelect } from "@/components/ui";
+import { Card, NumberInput, PresetDropdown } from "@/components/ui";
 import { materialHelperText, materialPresets } from "@/lib/presets";
 import { calculateCoolingArea } from "@/lib/thermal";
 
@@ -31,7 +31,7 @@ export function GeometryInput({
 
   return (
     <Card
-      title="Object Geometry"
+      title="Object Properties"
       info="The object is modeled as a cuboid (box shape) illuminated on one face. Heat is lost from all faces."
     >
       <div className="space-y-5">
@@ -65,8 +65,8 @@ export function GeometryInput({
           helpText="Heavier objects take longer to heat up but also hold more heat."
         />
 
-        <PresetSelect
-          label="Material (Specific Heat)"
+        <PresetDropdown
+          label="Thermal Mass"
           presets={materialPresets}
           value={specificHeat}
           onChange={onSpecificHeatChange}

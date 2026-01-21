@@ -1,4 +1,4 @@
-import { Card, NumberInput, PresetSelect } from "@/components/ui";
+import { Card, NumberInput, PresetDropdown } from "@/components/ui";
 import { convectionHelperText, convectionPresets } from "@/lib/presets";
 
 interface EnvironmentInputProps {
@@ -20,7 +20,7 @@ export function EnvironmentInput({
       info="Air movement affects how quickly heat is carried away. Ambient temperature is the surrounding air temperature."
     >
       <div className="space-y-5">
-        <PresetSelect
+        <PresetDropdown
           label="Air Movement"
           presets={convectionPresets}
           value={convectionCoeff}
