@@ -27,33 +27,35 @@ export function PresetDropdown({
   const inputId = label.toLowerCase().replace(/\s+/g, "-");
   const selectId = `${inputId}-preset`;
 
-  // Track selected preset by label (handles duplicate values)
-  const [selectedLabel, setSelectedLabel] = useState<string | null>(() => {
-    // Initialize with first matching preset
+  // Track selection: preset label or "__custom__" for explicit custom mode
+  const [selection, setSelection] = useState<string>(() => {
+    // Initialize with first matching preset, or custom if no match
     const match = presets.find((p) => Math.abs(p.value - value) < 0.001);
-    return match?.label ?? null;
+    return match?.label ?? "__custom__";
   });
 
-  // Find active preset: prefer selected label if value still matches, else find by value
-  const activePreset = (() => {
-    if (selectedLabel) {
-      const byLabel = presets.find((p) => p.label === selectedLabel);
-      if (byLabel && Math.abs(byLabel.value - value) < 0.001) {
-        return byLabel;
-      }
+  // Determine if we're in custom mode (explicitly selected or value doesn't match selection)
+  const isCustom = (() => {
+    if (selection === "__custom__") return true;
+    // If selection is a preset label, check if value still matches
+    const selectedPreset = presets.find((p) => p.label === selection);
+    if (selectedPreset && Math.abs(selectedPreset.value - value) < 0.001) {
+      return false;
     }
-    return presets.find((p) => Math.abs(p.value - value) < 0.001) ?? null;
+    // Value changed and no longer matches selected preset
+    return true;
   })();
 
-  const isCustom = !activePreset;
-
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const label = e.target.value;
-    if (label === "") return; // Custom option selected, do nothing
+    const selectedValue = e.target.value;
+    if (selectedValue === "__custom__") {
+      setSelection("__custom__"); // Switch to custom mode, keep current value
+      return;
+    }
 
-    const preset = presets.find((p) => p.label === label);
+    const preset = presets.find((p) => p.label === selectedValue);
     if (preset) {
-      setSelectedLabel(preset.label);
+      setSelection(preset.label);
       onChange(preset.value);
     }
   };
@@ -61,17 +63,15 @@ export function PresetDropdown({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = Number.parseFloat(e.target.value);
     if (!Number.isNaN(v)) {
-      // Clear selected label when manually entering value
-      setSelectedLabel(null);
       onChange(v);
     }
   };
 
-  // Format option text with value and description
+  // Format option text: <value> | name - description
   const formatOption = (preset: Preset) => {
-    const desc = preset.description ? ` — ${preset.description}` : "";
-    const unitSuffix = unit ? unit : "";
-    return `${preset.label} (${preset.value}${unitSuffix})${desc}`;
+    const desc = preset.description ? ` - ${preset.description}` : "";
+    const valueStr = unit === "%" ? `${preset.value}%` : `${preset.value}`;
+    return `${valueStr} | ${preset.label}${desc}`;
   };
 
   return (
@@ -84,24 +84,19 @@ export function PresetDropdown({
       {/* Preset dropdown */}
       <select
         id={selectId}
-        value={activePreset?.label ?? ""}
+        value={isCustom ? "__custom__" : selection}
         onChange={handleSelectChange}
         className="select-field"
       >
-        {isCustom && (
-          <option value="" disabled>
-            Custom ({value}
-            {unit ?? ""})
-          </option>
-        )}
         {presets.map((preset) => (
           <option key={preset.label} value={preset.label}>
             {formatOption(preset)}
           </option>
         ))}
+        <option value="__custom__">Custom</option>
       </select>
 
-      {/* Direct numeric input */}
+      {/* Direct numeric input - only shown when Custom is selected */}
       <input
         type="number"
         id={inputId}
@@ -110,7 +105,7 @@ export function PresetDropdown({
         min={min}
         max={max}
         step={step}
-        className="input-field font-mono"
+        className={`input-field font-mono ${isCustom ? "" : "hidden"}`}
         aria-label={`${label} custom value`}
       />
 

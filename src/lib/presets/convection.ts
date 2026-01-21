@@ -34,4 +34,4 @@ export const convectionPresets: PresetCollection = [
 export const convectionHelperText =
   "Moving air carries heat away faster and lowers the maximum temperature.";
 
-export const defaultConvection = 10;
+export const defaultConvection = 8;
