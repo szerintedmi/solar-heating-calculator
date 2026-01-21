@@ -10,7 +10,7 @@ export const areaPresets: PresetCollection = [
   { label: "1 m²", value: 1, description: "Square meter" },
 ];
 
-export const defaultArea = 0.01; // 10cm × 10cm
+export const defaultArea = 0.002; // 20 cm²
 
 /**
  * Thickness presets (m)
