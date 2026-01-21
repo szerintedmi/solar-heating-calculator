@@ -10,14 +10,20 @@ export const CELSIUS_TO_KELVIN = 273.15;
 
 /** Default simulation parameters */
 export const SIMULATION = {
-  /** Maximum simulation time in seconds (30 minutes) */
-  MAX_TIME: 1800,
-  /** Time step for Euler integration in seconds */
-  TIME_STEP: 0.1,
+  /** Minimum simulation time in seconds (30 minutes) */
+  MIN_TIME: 1800,
+  /** Maximum simulation time in seconds (24 hours) - safety cap */
+  MAX_TIME: 86400,
+  /** Base time step for Euler integration in seconds (used for short simulations) */
+  BASE_TIME_STEP: 0.1,
+  /** Maximum number of simulation steps to maintain performance */
+  MAX_STEPS: 20000,
   /** Number of points to include in output (downsampled from simulation) */
   OUTPUT_POINTS: 200,
   /** Tolerance for equilibrium solver */
   EQUILIBRIUM_TOLERANCE: 0.001,
   /** Maximum iterations for equilibrium solver */
   MAX_ITERATIONS: 100,
+  /** Number of time constants to simulate (5τ ≈ 99.3% of equilibrium) */
+  TIME_CONSTANTS: 5,
 } as const;
