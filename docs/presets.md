@@ -53,20 +53,33 @@ All values are order-of-magnitude correct, suitable for estimation and intuition
 
 **Definition:** Efficiency of thermal radiation emission (in the infrared).
 
-**Key idea:** Shiny/metallic surfaces are poor radiators; matte/painted surfaces radiate well regardless of color.
+**Key idea:** Emissivity is mostly about **surface finish** (shiny vs matte/painted), not visible color.
+
+> **Note:** Thermal emissivity (longwave infrared, ~5–50 μm) and solar absorptivity (visible/near‑IR, ~0.3–2.5 μm) are measured at different wavelengths. Many common matte/painted non-metal surfaces have high ε (~0.9), but metals and selective coatings can differ dramatically.
 
 ### Presets
 
 | Preset Label | ε (emissivity) | Typical Range | Justification |
 |--------------|----------------|---------------|---------------|
-| Matte black surface | 0.95 | 0.90–0.98 | Near-ideal thermal radiator |
-| Painted / oxidized surface | 0.85 | 0.75–0.90 | Most real-world surfaces |
-| Bare metal (oxidized) | 0.60 | 0.40–0.75 | Depends on oxidation |
-| Polished metal | 0.10 | 0.03–0.20 | Very poor radiator |
+| Matte / painted surface (any color) | 0.90 | 0.85–0.95 | Most paints and matte coatings radiate well regardless of visible color |
+| Wood (unfinished) | 0.90 | 0.85–0.95 | Most wood surfaces are good IR emitters; finish matters more than species |
+| Plastic (most, matte) | 0.90 | 0.85–0.95 | Many polymers have high longwave emissivity; varies with additives/finish |
+| Rubber / silicone | 0.94 | 0.90–0.97 | Common elastomers are typically very high-ε surfaces |
+| Paper / fabric | 0.93 | 0.90–0.97 | Fibrous/matte surfaces tend to be excellent radiators |
+| Glass / ceramic | 0.92 | 0.85–0.95 | Typical non-metal solids have high longwave emissivity |
+| Concrete / brick / stone | 0.93 | 0.90–0.97 | Common building materials are typically high-ε in the longwave IR |
+| Metal, oxidized / anodized | 0.80 | 0.60–0.90 | Oxide layers and anodizing raise ε substantially |
+| Metal, bare / brushed (clean) | 0.20 | 0.10–0.40 | Bare metals are moderate-to-poor radiators when not oxidized |
+| Metal, polished / mirror-like | 0.05 | 0.02–0.10 | Very poor radiator (radiation losses can be dramatically lower) |
 
 **UX hint:**
 
 > "Radiation dominates heat loss at high temperatures."
+
+**How much does ε vary by material/type?**
+
+- **Wood, plastics, paper, fabrics, glass/ceramics:** usually **not a huge spread** (often ~0.85–0.95). Surface finish (glossy vs matte), coatings, and contamination matter more than the exact base material.
+- **Metals:** **huge spread** depending on oxidation and polish (polished foil can be ~0.02–0.1; oxidized/anodized surfaces can be ~0.6–0.9). This is often the single biggest emissivity-driven difference users encounter in practice.
 
 ---
 

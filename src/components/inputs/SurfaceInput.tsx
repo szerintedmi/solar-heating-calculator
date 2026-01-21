@@ -1,4 +1,4 @@
-import { Card, PresetSelect } from "@/components/ui";
+import { Card, PresetDropdown } from "@/components/ui";
 import {
   absorptivityHelperText,
   absorptivityPresets,
@@ -25,7 +25,7 @@ export function SurfaceInput({
       info="Absorptivity controls heat gain from light. Emissivity controls heat loss by radiation. They can differ for specialized coatings."
     >
       <div className="space-y-5">
-        <PresetSelect
+        <PresetDropdown
           label="Absorptivity (α)"
           presets={absorptivityPresets}
           value={absorptivity}
@@ -36,7 +36,7 @@ export function SurfaceInput({
           helpText={absorptivityHelperText}
         />
 
-        <PresetSelect
+        <PresetDropdown
           label="Emissivity (ε)"
           presets={emissivityPresets}
           value={emissivity}

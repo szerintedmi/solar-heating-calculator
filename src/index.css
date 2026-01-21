@@ -41,6 +41,22 @@
     @apply border-neutral-600;
   }
 
+  .select-field {
+    @apply w-full px-3 py-2 bg-neutral-850 border border-neutral-700 rounded-lg
+      text-neutral-100
+      focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:border-transparent
+      transition-colors duration-150
+      cursor-pointer;
+  }
+
+  .select-field:hover:not(:focus) {
+    @apply border-neutral-600;
+  }
+
+  .preset-description {
+    @apply text-sm text-neutral-400 italic;
+  }
+
   .input-label {
     @apply block text-sm font-medium text-neutral-300 mb-1.5;
   }
