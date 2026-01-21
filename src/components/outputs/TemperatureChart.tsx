@@ -128,17 +128,11 @@ export function TemperatureChart({
           Temperature
         </span>
         <span className="flex items-center gap-1.5">
-          <span
-            className="w-4 h-0.5 bg-orange-500 rounded border-dashed"
-            style={{ borderTop: "1px dashed #f97316" }}
-          />
+          <span className="w-4 h-0 border-t-2 border-dashed border-orange-500" />
           Equilibrium ({equilibriumCelsius.toFixed(1)}°C)
         </span>
         <span className="flex items-center gap-1.5">
-          <span
-            className="w-4 h-0.5 bg-blue-500 rounded"
-            style={{ borderTop: "1px dashed #3b82f6" }}
-          />
+          <span className="w-4 h-0 border-t-2 border-dashed border-blue-500" />
           Ambient ({ambientCelsius.toFixed(1)}°C)
         </span>
       </div>
