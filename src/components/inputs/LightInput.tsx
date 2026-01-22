@@ -1,6 +1,5 @@
 import { Card, NumberInput, PresetDropdown } from "@/components/ui";
 import {
-  irradianceHelperText,
   irradiancePresets,
   kFactorHelperText,
   kFactorPresets,
@@ -8,6 +7,30 @@ import {
   reflectanceHelperText,
   reflectancePresets,
 } from "@/lib/presets";
+
+const irradianceHelpText = (
+  <>
+    Power hitting the surface (assumes surface faces the sun). Varies with sun angle (lower sun =
+    longer atmospheric path), clouds, and air conditions. Historical data:{" "}
+    <a
+      href="https://re.jrc.ec.europa.eu/pvg_tools/en/#MR"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline hover:text-neutral-300"
+    >
+      Europe
+    </a>
+    ,{" "}
+    <a
+      href={`${import.meta.env.BASE_URL}data/london_clearsky_irradiance_weekly.csv`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline hover:text-neutral-300"
+    >
+      London
+    </a>
+  </>
+);
 import type { LightInputMode, LightInput as LightInputType } from "@/lib/thermal";
 
 interface LightInputProps {
@@ -77,7 +100,7 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
           onChange={(v) => onChange({ irradiance: v })}
           unit="W/m²"
           min={0}
-          helpText={irradianceHelperText}
+          helpText={irradianceHelpText}
         />
       )}
 
