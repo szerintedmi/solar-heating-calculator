@@ -32,7 +32,7 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
   return (
     <Card title="Light Input">
       {/* Mode selector */}
-      <div className="flex gap-1 p-1 bg-neutral-800 rounded-lg mb-4">
+      <div className="flex gap-1 p-1 bg-neutral-800 rounded-lg mb-2">
         <button
           type="button"
           className={`mode-tab flex-1 ${mode === "direct" ? "active" : ""}`}
@@ -55,6 +55,18 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
           Lux + ND
         </button>
       </div>
+      {mode === "lux" && (
+        <p className="text-xs text-neutral-500 mb-4">
+          Estimate solar power when you only have a lux meter
+        </p>
+      )}
+      {mode === "lux-nd" && (
+        <p className="text-xs text-neutral-500 mb-4">
+          For concentrated sunlight (e.g., multiple mirrors), use ND filters to stay within your lux
+          meter's range
+        </p>
+      )}
+      {mode === "direct" && <div className="mb-2" />}
 
       {/* Mode-specific inputs */}
       {mode === "direct" && (
@@ -175,7 +187,7 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
             />
 
             <NumberInput
-              label="Number of reflectors"
+              label="Number of reflectors focusing to the same point"
               value={reflection.numReflectors}
               onChange={(v) =>
                 onChange({
