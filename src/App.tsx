@@ -26,7 +26,11 @@ export function App() {
               onChange={calc.setLightInput}
             />
 
-            <ReflectionInput reflection={calc.light.reflection} onChange={calc.setReflection} />
+            <ReflectionInput
+              reflection={calc.light.reflection}
+              spotGeometry={calc.spotGeometry}
+              onChange={calc.setReflection}
+            />
 
             <SurfaceInput
               absorptivity={calc.absorptivity}
@@ -47,6 +51,7 @@ export function App() {
               thicknessMm={calc.thicknessMm}
               massGrams={calc.massGrams}
               specificHeat={calc.specificHeat}
+              spotGeometry={calc.spotGeometry}
               onAreaChange={calc.setAreaCm2}
               onThicknessChange={calc.setThicknessMm}
               onMassChange={calc.setMassGrams}

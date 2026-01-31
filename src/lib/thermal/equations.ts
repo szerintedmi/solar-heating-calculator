@@ -1,5 +1,5 @@
-import { STEFAN_BOLTZMANN } from "./constants";
-import type { ThermalInputs } from "./types";
+import { STEFAN_BOLTZMANN, SUN_HALF_ANGLE_RAD } from "./constants";
+import type { SpotGeometry, ThermalInputs } from "./types";
 
 /**
  * Calculate the cooling surface area for a cuboid with square cross-section.
@@ -106,6 +106,17 @@ export function calculateTotalHeatLoss(
 }
 
 /**
+ * Get the effective illuminated area from inputs.
+ * Uses illuminatedArea if set, otherwise falls back to area.
+ *
+ * @param inputs - Thermal calculation inputs
+ * @returns Effective illuminated area in m²
+ */
+export function getIlluminatedArea(inputs: ThermalInputs): number {
+  return inputs.illuminatedArea ?? inputs.area;
+}
+
+/**
  * Calculate net heat flow (absorbed power minus losses).
  * dQ/dt = P_abs - P_loss
  *
@@ -114,7 +125,12 @@ export function calculateTotalHeatLoss(
  * @returns Net heat flow in Watts (positive = heating, negative = cooling)
  */
 export function calculateNetHeatFlow(inputs: ThermalInputs, temperature: number): number {
-  const absorbedPower = calculateAbsorbedPower(inputs.irradiance, inputs.area, inputs.absorptivity);
+  const illuminatedArea = getIlluminatedArea(inputs);
+  const absorbedPower = calculateAbsorbedPower(
+    inputs.irradiance,
+    illuminatedArea,
+    inputs.absorptivity,
+  );
   const losses = calculateTotalHeatLoss(inputs, temperature);
   return absorbedPower - losses.total;
 }
@@ -166,4 +182,52 @@ export function luxWithNDToIrradiance(
   const ndAttenuation = calculateNDAttenuation(ndFilters);
   const actualLux = measuredLux * ndAttenuation;
   return luxToIrradiance(actualLux, kFactor);
+}
+
+/**
+ * Calculate spot geometry from mirror size and distance.
+ * Due to the sun's angular size, a flat mirror produces a spot larger than itself.
+ *
+ * s_spot = s_mirror + 2 × L × tan(θ_sun)
+ *
+ * @param mirrorSizeMm - Mirror side length in mm
+ * @param distanceM - Distance from mirror to target in m
+ * @returns SpotGeometry with side length, area, and concentration factor
+ */
+export function calculateSpotGeometry(mirrorSizeMm: number, distanceM: number): SpotGeometry {
+  // Convert mirror size to meters
+  const mirrorSizeM = mirrorSizeMm / 1000;
+
+  // Calculate spot side length: s_spot = s + 2L·tan(θ_sun)
+  const sideLength = mirrorSizeM + 2 * distanceM * Math.tan(SUN_HALF_ANGLE_RAD);
+
+  // Calculate areas
+  const spotArea = sideLength * sideLength;
+  const mirrorArea = mirrorSizeM * mirrorSizeM;
+
+  // Concentration factor: ratio of mirror area to spot area (always ≤1)
+  const concentrationFactor = mirrorArea / spotArea;
+
+  return {
+    sideLength,
+    area: spotArea,
+    concentrationFactor,
+  };
+}
+
+/**
+ * Calculate effective illuminated area, limited by spot size if applicable.
+ *
+ * @param objectAreaM2 - Object illuminated area in m²
+ * @param spotGeometry - Optional spot geometry that may limit effective area
+ * @returns Effective illuminated area in m²
+ */
+export function calculateEffectiveIlluminatedArea(
+  objectAreaM2: number,
+  spotGeometry?: SpotGeometry,
+): number {
+  if (!spotGeometry) {
+    return objectAreaM2;
+  }
+  return Math.min(objectAreaM2, spotGeometry.area);
 }

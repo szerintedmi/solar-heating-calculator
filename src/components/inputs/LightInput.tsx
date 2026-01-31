@@ -8,8 +8,9 @@ import {
 
 const irradianceHelpText = (
   <>
-    Power hitting the surface (assumes surface faces the sun). Varies with sun angle (lower sun =
-    longer atmospheric path), clouds, and air conditions. Historical data:{" "}
+    Power per unit area on a surface <strong>facing the sun</strong> (perpendicular to sun rays).
+    This is NOT Global Horizontal Irradiance (GHI)—for horizontal surfaces, irradiance is lower due
+    to sun angle. Varies with atmospheric path, clouds, and air conditions. Historical data:{" "}
     <a
       href="https://re.jrc.ec.europa.eu/pvg_tools/en/#MR"
       target="_blank"

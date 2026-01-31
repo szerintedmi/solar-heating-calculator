@@ -13,8 +13,11 @@ import {
   type CalculationResult,
   type LightInput,
   type ReflectionInput,
+  type SpotGeometry,
   type ThermalInputs,
+  calculateEffectiveIlluminatedArea,
   calculateEquilibrium,
+  calculateSpotGeometry,
   luxToIrradiance,
   luxWithNDToIrradiance,
   simulateTransient,
@@ -62,6 +65,18 @@ export function useCalculator() {
   // Extract light for cleaner dependency tracking
   const { light } = state;
 
+  // Compute spot geometry when mirror parameters are provided
+  const spotGeometry = useMemo<SpotGeometry | null>(() => {
+    if (
+      light.reflection.enabled &&
+      light.reflection.mirrorSizeMm !== undefined &&
+      light.reflection.distanceM !== undefined
+    ) {
+      return calculateSpotGeometry(light.reflection.mirrorSizeMm, light.reflection.distanceM);
+    }
+    return null;
+  }, [light.reflection]);
+
   // Compute effective irradiance based on light input mode
   const computedIrradiance = useMemo(() => {
     // Get base irradiance from mode
@@ -80,20 +95,38 @@ export function useCalculator() {
         baseIrradiance = light.irradiance;
     }
 
-    // Apply reflection multiplier if enabled
+    // Apply reflection if enabled
     if (light.reflection.enabled) {
       const reflectanceDecimal = light.reflection.reflectance / 100;
-      return baseIrradiance * reflectanceDecimal * light.reflection.numReflectors;
+      let irradiance = baseIrradiance * reflectanceDecimal * light.reflection.numReflectors;
+
+      // Apply concentration factor from spot geometry (accounts for sun's angular spread)
+      // As distance increases, the spot spreads and irradiance at target decreases
+      if (spotGeometry) {
+        irradiance *= spotGeometry.concentrationFactor;
+      }
+
+      return irradiance;
     }
 
     return baseIrradiance;
-  }, [light]);
+  }, [light, spotGeometry]);
 
   // Convert user-friendly units to SI units
   const thermalInputs = useMemo<ThermalInputs>(() => {
+    const objectAreaM2 = state.areaCm2 / 10000; // cm² to m²
+
+    // When reflection with mirror geometry is enabled, illuminated area may be limited by spot size
+    // But the full object area is always used for cooling calculations
+    const illuminatedAreaM2 =
+      light.reflection.enabled && spotGeometry
+        ? calculateEffectiveIlluminatedArea(objectAreaM2, spotGeometry)
+        : objectAreaM2;
+
     return {
       irradiance: computedIrradiance,
-      area: state.areaCm2 / 10000, // cm² to m²
+      area: objectAreaM2, // Full object area for cooling
+      illuminatedArea: illuminatedAreaM2, // May be smaller if spot < object
       thickness: state.thicknessMm / 1000, // mm to m
       mass: state.massGrams / 1000, // g to kg
       absorptivity: state.absorptivity,
@@ -102,7 +135,7 @@ export function useCalculator() {
       specificHeat: state.specificHeat,
       ambientTemp: state.ambientTempCelsius + CELSIUS_TO_KELVIN,
     };
-  }, [state, computedIrradiance]);
+  }, [state, computedIrradiance, light.reflection.enabled, spotGeometry]);
 
   // Run calculations
   const results = useMemo<CalculationResult>(() => {
@@ -174,6 +207,7 @@ export function useCalculator() {
     computedIrradiance,
     thermalInputs,
     results,
+    spotGeometry,
 
     // Setters
     setLightInput,

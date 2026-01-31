@@ -4,8 +4,10 @@
 export interface ThermalInputs {
   /** Irradiance in W/m² */
   irradiance: number;
-  /** Illuminated area in m² */
+  /** Object face area in m² (used for cooling area calculation) */
   area: number;
+  /** Illuminated area in m² (used for absorbed power, defaults to area if not set) */
+  illuminatedArea?: number;
   /** Object thickness in m */
   thickness: number;
   /** Object mass in kg */
@@ -78,6 +80,18 @@ export interface CalculationResult {
 export type LightInputMode = "direct" | "lux" | "lux-nd";
 
 /**
+ * Calculated spot geometry from sun angular spread on a flat mirror
+ */
+export interface SpotGeometry {
+  /** Spot side length in meters */
+  sideLength: number;
+  /** Spot area in m² */
+  area: number;
+  /** Concentration factor (mirror area / spot area, always ≤1 for flat mirrors) */
+  concentrationFactor: number;
+}
+
+/**
  * Reflection input for mirrors/reflectors
  */
 export interface ReflectionInput {
@@ -87,6 +101,10 @@ export interface ReflectionInput {
   reflectance: number;
   /** Number of reflectors */
   numReflectors: number;
+  /** Mirror side length in mm (for angular spread calculation) */
+  mirrorSizeMm?: number;
+  /** Distance from mirror to target in meters */
+  distanceM?: number;
 }
 
 /**

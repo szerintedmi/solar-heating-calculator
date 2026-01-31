@@ -36,15 +36,17 @@ export function Assumptions() {
               <span className="text-neutral-500">•</span>
               <span>
                 <strong className="text-neutral-300">Uniform temperature</strong> — The entire
-                object is treated as one temperature (lumped model).
+                object is treated as one temperature (lumped model). Most valid for thin,
+                high-conductivity objects; less accurate for thick/insulating materials or partial
+                illumination (e.g., small reflected spots).
               </span>
             </li>
             <li className="flex gap-2">
               <span className="text-neutral-500">•</span>
               <span>
                 <strong className="text-neutral-300">Cuboid geometry</strong> — The object is
-                modeled as a box with square cross-section; cooling area is calculated from
-                illuminated area and thickness.
+                modeled as a box with square cross-section; cooling area is calculated from the full
+                object face area and thickness (A<sub>cool</sub> = 2A + 4√A × d).
               </span>
             </li>
             <li className="flex gap-2">
@@ -61,6 +63,23 @@ export function Assumptions() {
                 <strong className="text-neutral-300">Constant convection coefficient</strong> —
                 Treated as constant; in reality it varies with geometry, orientation, and
                 temperature difference.
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-neutral-500">•</span>
+              <span>
+                <strong className="text-neutral-300">Small-spot heating creates hot spots</strong> —
+                If only part of the surface is illuminated (especially with mirrors), real objects
+                develop temperature gradients; the model is best interpreted as an average
+                temperature.
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-neutral-500">•</span>
+              <span>
+                <strong className="text-neutral-300">Mirror optics simplified</strong> — Ignores
+                cosine/projection loss (tilted mirrors intercept less power), aiming error, and
+                incomplete spot overlap when using multiple mirrors.
               </span>
             </li>
             <li className="flex gap-2">

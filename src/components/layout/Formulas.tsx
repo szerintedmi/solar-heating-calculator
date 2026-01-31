@@ -37,7 +37,7 @@ export function Formulas() {
 
           {/* Absorbed Power */}
           <section>
-            <h3 className="text-neutral-200 font-medium mb-2">Absorbed Power</h3>
+            <h3 className="text-neutral-200 font-medium mb-2">Absorbed Power (Direct)</h3>
             <div className="font-mono text-neutral-300 bg-neutral-800 px-3 py-2 rounded">
               P<sub>abs</sub> = E × A × α
             </div>
@@ -46,6 +46,55 @@ export function Formulas() {
               <li>A = illuminated area (m²)</li>
               <li>α = absorptivity (0–1)</li>
             </ul>
+          </section>
+
+          {/* Reflected Light Section */}
+          <section>
+            <h3 className="text-neutral-200 font-medium mb-2">Spot Geometry (Reflected Light)</h3>
+            <p className="text-neutral-400 text-xs mb-2">
+              Due to the Sun's angular size (~0.5°), a flat mirror produces a spot larger than
+              itself:
+            </p>
+            <div className="font-mono text-neutral-300 bg-neutral-800 px-3 py-2 rounded">
+              s<sub>spot</sub> = s + 2L × tan(θ<sub>sun</sub>)
+            </div>
+            <ul className="mt-2 text-xs text-neutral-500 space-y-1">
+              <li>s = mirror side length (m)</li>
+              <li>L = distance from mirror to target (m)</li>
+              <li>
+                θ<sub>sun</sub> ≈ 4.65 mrad (Sun half-angle)
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h3 className="text-neutral-200 font-medium mb-2">Concentration Factor</h3>
+            <p className="text-neutral-400 text-xs mb-2">
+              Ratio of mirror area to spot area (always ≤1 for flat mirrors):
+            </p>
+            <div className="font-mono text-neutral-300 bg-neutral-800 px-3 py-2 rounded">
+              C = s² / s<sub>spot</sub>²
+            </div>
+          </section>
+
+          <section>
+            <h3 className="text-neutral-200 font-medium mb-2">Absorbed Power (Reflected)</h3>
+            <div className="font-mono text-neutral-300 bg-neutral-800 px-3 py-2 rounded">
+              P<sub>abs</sub> = E × R × C × n × A<sub>eff</sub> × α
+            </div>
+            <ul className="mt-2 text-xs text-neutral-500 space-y-1">
+              <li>R = mirror reflectance (0–1)</li>
+              <li>C = concentration factor</li>
+              <li>n = number of mirrors</li>
+              <li>
+                A<sub>eff</sub> = min(A, A<sub>spot</sub>) — effective illuminated area
+              </li>
+            </ul>
+            <p className="mt-2 text-xs text-neutral-500">
+              When object ≥ spot: all reflected power is absorbed (P independent of distance).
+              <br />
+              When object {"<"} spot: only a fraction is captured (P decreases with distance).
+            </p>
           </section>
 
           {/* Heat Loss */}
@@ -98,9 +147,13 @@ export function Formulas() {
               A<sub>cool</sub> = 2A + 4√A × d
             </div>
             <ul className="mt-2 text-xs text-neutral-500 space-y-1">
-              <li>A = illuminated face area (m²)</li>
+              <li>A = object face area (m²)</li>
               <li>d = thickness (m)</li>
             </ul>
+            <p className="mt-2 text-xs text-neutral-500">
+              Note: Cooling area is always based on full object geometry, not the illuminated
+              portion. The entire object surface loses heat.
+            </p>
           </section>
 
           {/* Transient */}

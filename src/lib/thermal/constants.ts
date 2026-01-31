@@ -8,6 +8,9 @@ export const STEFAN_BOLTZMANN = 5.67e-8;
 /** Conversion from Celsius to Kelvin */
 export const CELSIUS_TO_KELVIN = 273.15;
 
+/** Sun angular half-angle in radians (≈0.267° or 4.65 mrad) */
+export const SUN_HALF_ANGLE_RAD = 4.65e-3;
+
 /** Default simulation parameters */
 export const SIMULATION = {
   /** Minimum simulation time in seconds (30 minutes) */

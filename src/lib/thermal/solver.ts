@@ -5,6 +5,7 @@ import {
   calculateCoolingArea,
   calculateNetHeatFlow,
   calculateRadiationLoss,
+  getIlluminatedArea,
 } from "./equations";
 import type { EquilibriumResult, ThermalInputs, TimePoint, TransientResult } from "./types";
 
@@ -19,7 +20,12 @@ export function solveEquilibriumTemperature(inputs: ThermalInputs): number {
   const { ambientTemp } = inputs;
 
   // Check if there's no heat input
-  const absorbedPower = calculateAbsorbedPower(inputs.irradiance, inputs.area, inputs.absorptivity);
+  const illuminatedArea = getIlluminatedArea(inputs);
+  const absorbedPower = calculateAbsorbedPower(
+    inputs.irradiance,
+    illuminatedArea,
+    inputs.absorptivity,
+  );
   if (absorbedPower <= 0) {
     return ambientTemp;
   }
@@ -62,9 +68,16 @@ export function solveEquilibriumTemperature(inputs: ThermalInputs): number {
  */
 export function calculateEquilibrium(inputs: ThermalInputs): EquilibriumResult {
   const temperature = solveEquilibriumTemperature(inputs);
+  // Cooling area is based on full object geometry
   const coolingArea = calculateCoolingArea(inputs.area, inputs.thickness);
+  // Absorbed power is based on illuminated area (may be smaller if spot < object)
+  const illuminatedArea = getIlluminatedArea(inputs);
 
-  const absorbedPower = calculateAbsorbedPower(inputs.irradiance, inputs.area, inputs.absorptivity);
+  const absorbedPower = calculateAbsorbedPower(
+    inputs.irradiance,
+    illuminatedArea,
+    inputs.absorptivity,
+  );
   const convectionLoss = calculateConvectionLoss(
     inputs.convectionCoeff,
     coolingArea,

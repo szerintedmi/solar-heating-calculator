@@ -34,6 +34,18 @@ export function CalculationExplainer() {
           </div>
 
           <div>
+            <h4 className="font-medium text-neutral-100 mb-2">
+              1b. Reflected Light (if using mirrors)
+            </h4>
+            <p className="text-neutral-400">
+              A flat mirror reflects sunlight into a spot that grows larger with distance. The Sun
+              isn't a point source — its ~0.5° angular width causes the reflected beam to spread.
+              Close to the mirror, the spot is nearly mirror-sized. Farther away, the spot grows and
+              the light intensity (irradiance) at the target decreases.
+            </p>
+          </div>
+
+          <div>
             <h4 className="font-medium text-neutral-100 mb-2">2. Heat Escapes to Air</h4>
             <p className="text-neutral-400">
               As the object warms up, it loses heat to the surrounding air. Moving air carries heat
