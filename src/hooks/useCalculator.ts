@@ -12,6 +12,7 @@ import {
   CELSIUS_TO_KELVIN,
   type CalculationResult,
   type LightInput,
+  type ReflectionInput,
   type ThermalInputs,
   calculateEquilibrium,
   luxToIrradiance,
@@ -150,6 +151,13 @@ export function useCalculator() {
     setState((prev) => ({ ...prev, specificHeat }));
   };
 
+  const setReflection = (reflection: ReflectionInput) => {
+    setState((prev) => ({
+      ...prev,
+      light: { ...prev.light, reflection },
+    }));
+  };
+
   return {
     // State
     light: state.light,
@@ -169,6 +177,7 @@ export function useCalculator() {
 
     // Setters
     setLightInput,
+    setReflection,
     setAbsorptivity,
     setEmissivity,
     setConvectionCoeff,

@@ -4,8 +4,6 @@ import {
   kFactorHelperText,
   kFactorPresets,
   ndFilterPresets,
-  reflectanceHelperText,
-  reflectancePresets,
 } from "@/lib/presets";
 
 const irradianceHelpText = (
@@ -40,7 +38,7 @@ interface LightInputProps {
 }
 
 export function LightInput({ lightInput, computedIrradiance, onChange }: LightInputProps) {
-  const { mode, irradiance, lux, kFactor, ndFilters, reflection } = lightInput;
+  const { mode, irradiance, lux, kFactor, ndFilters } = lightInput;
 
   const totalND = ndFilters.reduce((acc, nd) => acc * nd, 1);
 
@@ -169,75 +167,6 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
           </div>
         </div>
       )}
-
-      {/* Reflected light section */}
-      <div className="mt-4 pt-4 border-t border-neutral-700">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={reflection.enabled}
-            onChange={(e) =>
-              onChange({
-                reflection: {
-                  ...reflection,
-                  enabled: e.target.checked,
-                },
-              })
-            }
-            className="w-4 h-4 rounded bg-neutral-800 border-neutral-600 text-blue-600 focus:ring-2 focus:ring-blue-500"
-          />
-          <span className="input-label mb-0">Use reflected light</span>
-        </label>
-
-        {reflection.enabled && (
-          <div className="mt-4 space-y-4 pl-6 border-l-2 border-neutral-700">
-            <PresetDropdown
-              label="Reflectance"
-              presets={reflectancePresets}
-              value={reflection.reflectance}
-              onChange={(v) =>
-                onChange({
-                  reflection: {
-                    ...reflection,
-                    reflectance: v,
-                  },
-                })
-              }
-              unit="%"
-              min={0}
-              max={100}
-              helpText={reflectanceHelperText}
-            />
-
-            <NumberInput
-              label="Number of reflectors focusing to the same point"
-              value={reflection.numReflectors}
-              onChange={(v) =>
-                onChange({
-                  reflection: {
-                    ...reflection,
-                    numReflectors: v,
-                  },
-                })
-              }
-              min={1}
-            />
-
-            {/* Reflection multiplier display */}
-            <div className="p-3 bg-neutral-800 rounded-lg">
-              <p className="text-sm text-neutral-400">Reflection multiplier:</p>
-              <p className="text-lg font-mono text-neutral-100">
-                {((reflection.reflectance / 100) * reflection.numReflectors).toFixed(2)}×
-              </p>
-              {reflection.numReflectors > 1 && (
-                <p className="text-xs text-neutral-500 mt-1">
-                  {reflection.numReflectors} mirrors × {reflection.reflectance}% each
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
 
       {/* Sanity check warnings */}
       {computedIrradiance > 2000 && (

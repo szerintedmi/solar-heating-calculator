@@ -1,4 +1,10 @@
-import { EnvironmentInput, GeometryInput, LightInput, SurfaceInput } from "@/components/inputs";
+import {
+  EnvironmentInput,
+  GeometryInput,
+  LightInput,
+  ReflectionInput,
+  SurfaceInput,
+} from "@/components/inputs";
 import { Assumptions, CalculationExplainer, Formulas, Header } from "@/components/layout";
 import { ResultsDisplay, TemperatureChart } from "@/components/outputs";
 import { useCalculator } from "@/hooks/useCalculator";
@@ -19,6 +25,8 @@ export function App() {
               computedIrradiance={calc.computedIrradiance}
               onChange={calc.setLightInput}
             />
+
+            <ReflectionInput reflection={calc.light.reflection} onChange={calc.setReflection} />
 
             <SurfaceInput
               absorptivity={calc.absorptivity}
