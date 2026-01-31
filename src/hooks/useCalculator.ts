@@ -86,6 +86,21 @@ export function useCalculator() {
     return Math.cos(angleRad);
   }, [light.incidenceAngleDeg]);
 
+  // Base irradiance from lux conversion only (for UI display in LightInput)
+  // Does NOT include reflection or incidence angle effects
+  const displayIrradiance = useMemo(() => {
+    switch (light.mode) {
+      case "direct":
+        return light.irradiance;
+      case "lux":
+        return luxToIrradiance(light.lux, light.kFactor);
+      case "lux-nd":
+        return luxWithNDToIrradiance(light.lux, light.ndFilters, light.kFactor);
+      default:
+        return light.irradiance;
+    }
+  }, [light.mode, light.irradiance, light.lux, light.kFactor, light.ndFilters]);
+
   // Compute effective irradiance based on light input mode
   const computedIrradiance = useMemo(() => {
     // Get base irradiance from mode
@@ -215,6 +230,7 @@ export function useCalculator() {
     specificHeat: state.specificHeat,
 
     // Computed
+    displayIrradiance,
     computedIrradiance,
     incidenceMultiplier,
     thermalInputs,

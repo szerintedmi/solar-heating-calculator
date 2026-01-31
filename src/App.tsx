@@ -22,7 +22,7 @@ export function App() {
           <div className="space-y-6">
             <LightInput
               lightInput={calc.light}
-              computedIrradiance={calc.computedIrradiance}
+              computedIrradiance={calc.displayIrradiance}
               incidenceMultiplier={calc.incidenceMultiplier}
               onChange={calc.setLightInput}
             />
