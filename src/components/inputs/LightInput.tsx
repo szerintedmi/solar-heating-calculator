@@ -167,16 +167,6 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
           </div>
         </div>
       )}
-
-      {/* Sanity check warnings */}
-      {computedIrradiance > 2000 && (
-        <div className="mt-4 p-3 bg-amber-900/20 border border-amber-700/30 rounded-lg">
-          <p className="text-xs text-amber-200/80">
-            Above typical horizontal clear-sky solar irradiance; may be concentration or input
-            mismatch.
-          </p>
-        </div>
-      )}
     </Card>
   );
 }
