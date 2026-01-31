@@ -2,6 +2,7 @@ import {
   defaultAbsorptivity,
   defaultConvection,
   defaultEmissivity,
+  defaultIncidenceAngle,
   defaultIrradiance,
   defaultKFactor,
   defaultReflectance,
@@ -48,6 +49,7 @@ const initialState: CalculatorState = {
       reflectance: defaultReflectance,
       numReflectors: 1,
     },
+    incidenceAngleDeg: defaultIncidenceAngle,
   },
   absorptivity: defaultAbsorptivity,
   emissivity: defaultEmissivity,
@@ -76,6 +78,13 @@ export function useCalculator() {
     }
     return null;
   }, [light.reflection]);
+
+  // Compute incidence angle multiplier: cos(φ)
+  // When light hits at an angle, effective collecting area shrinks
+  const incidenceMultiplier = useMemo(() => {
+    const angleRad = (light.incidenceAngleDeg * Math.PI) / 180;
+    return Math.cos(angleRad);
+  }, [light.incidenceAngleDeg]);
 
   // Compute effective irradiance based on light input mode
   const computedIrradiance = useMemo(() => {
@@ -106,11 +115,13 @@ export function useCalculator() {
         irradiance *= spotGeometry.concentrationFactor;
       }
 
-      return irradiance;
+      // Apply incidence angle multiplier
+      return irradiance * incidenceMultiplier;
     }
 
-    return baseIrradiance;
-  }, [light, spotGeometry]);
+    // Apply incidence angle multiplier to direct light
+    return baseIrradiance * incidenceMultiplier;
+  }, [light, spotGeometry, incidenceMultiplier]);
 
   // Convert user-friendly units to SI units
   const thermalInputs = useMemo<ThermalInputs>(() => {
@@ -205,6 +216,7 @@ export function useCalculator() {
 
     // Computed
     computedIrradiance,
+    incidenceMultiplier,
     thermalInputs,
     results,
     spotGeometry,

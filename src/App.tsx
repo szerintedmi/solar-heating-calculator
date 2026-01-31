@@ -23,6 +23,7 @@ export function App() {
             <LightInput
               lightInput={calc.light}
               computedIrradiance={calc.computedIrradiance}
+              incidenceMultiplier={calc.incidenceMultiplier}
               onChange={calc.setLightInput}
             />
 

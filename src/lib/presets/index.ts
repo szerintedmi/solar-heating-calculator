@@ -9,3 +9,4 @@ export * from "./geometry";
 export * from "./irradiance";
 export * from "./reflectance";
 export * from "./mirrorSize";
+export * from "./incidenceAngle";

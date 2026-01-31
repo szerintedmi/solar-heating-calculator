@@ -39,13 +39,18 @@ export function Formulas() {
           <section>
             <h3 className="text-neutral-200 font-medium mb-2">Absorbed Power (Direct)</h3>
             <div className="font-mono text-neutral-300 bg-neutral-800 px-3 py-2 rounded">
-              P<sub>abs</sub> = E × A × α
+              P<sub>abs</sub> = E × A × α × cos(φ)
             </div>
             <ul className="mt-2 text-xs text-neutral-500 space-y-1">
               <li>E = irradiance (W/m²)</li>
               <li>A = illuminated area (m²)</li>
               <li>α = absorptivity (0–1)</li>
+              <li>φ = incidence angle (degrees from perpendicular)</li>
             </ul>
+            <p className="mt-2 text-xs text-neutral-500">
+              If light arrives at an angle, the effective collecting area shrinks by cos(φ), so
+              heating drops accordingly.
+            </p>
           </section>
 
           {/* Reflected Light Section */}
@@ -80,7 +85,7 @@ export function Formulas() {
           <section>
             <h3 className="text-neutral-200 font-medium mb-2">Absorbed Power (Reflected)</h3>
             <div className="font-mono text-neutral-300 bg-neutral-800 px-3 py-2 rounded">
-              P<sub>abs</sub> = E × R × C × n × A<sub>eff</sub> × α
+              P<sub>abs</sub> = E × R × C × n × A<sub>eff</sub> × α × cos(φ)
             </div>
             <ul className="mt-2 text-xs text-neutral-500 space-y-1">
               <li>R = mirror reflectance (0–1)</li>
@@ -89,6 +94,7 @@ export function Formulas() {
               <li>
                 A<sub>eff</sub> = min(A, A<sub>spot</sub>) — effective illuminated area
               </li>
+              <li>φ = incidence angle (degrees from perpendicular)</li>
             </ul>
             <p className="mt-2 text-xs text-neutral-500">
               When object ≥ spot: all reflected power is absorbed (P independent of distance).

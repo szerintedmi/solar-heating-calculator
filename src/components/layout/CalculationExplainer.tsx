@@ -29,7 +29,8 @@ export function CalculationExplainer() {
             <p className="text-neutral-400">
               When light hits the surface, a fraction is absorbed and converted to heat. This
               fraction is the absorptivity (α). Dark surfaces absorb more; shiny surfaces reflect
-              more.
+              more. If light arrives at an angle (not perpendicular), the effective collecting area
+              shrinks by cos(φ), reducing heating accordingly.
             </p>
           </div>
 

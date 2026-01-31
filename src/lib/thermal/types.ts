@@ -122,4 +122,6 @@ export interface LightInput {
   ndFilters: number[];
   /** Optional reflection from mirrors */
   reflection: ReflectionInput;
+  /** Incidence angle in degrees (0° = perpendicular, default 30°) */
+  incidenceAngleDeg: number;
 }

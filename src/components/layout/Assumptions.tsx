@@ -77,9 +77,19 @@ export function Assumptions() {
             <li className="flex gap-2">
               <span className="text-neutral-500">•</span>
               <span>
+                <strong className="text-neutral-300">Incidence angle simplified</strong> — The
+                cos(φ) model approximates geometric projection effects. It does not model spot
+                stretching, reflectance angle dependence, or detailed optics at grazing angles
+                (φ&gt;75°).
+              </span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-neutral-500">•</span>
+              <span>
                 <strong className="text-neutral-300">Mirror optics simplified</strong> — Ignores
-                cosine/projection loss (tilted mirrors intercept less power), aiming error, and
-                incomplete spot overlap when using multiple mirrors.
+                mirror-angle cosine/projection loss (tilted mirrors intercept less power), aiming
+                error, and incomplete spot overlap when using multiple mirrors. The incidence angle
+                φ is a single approximation for geometry/alignment effects.
               </span>
             </li>
             <li className="flex gap-2">

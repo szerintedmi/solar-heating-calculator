@@ -1,5 +1,6 @@
 import { Card, NumberInput, PresetDropdown } from "@/components/ui";
 import {
+  incidenceAnglePresets,
   irradiancePresets,
   kFactorHelperText,
   kFactorPresets,
@@ -35,11 +36,17 @@ import type { LightInputMode, LightInput as LightInputType } from "@/lib/thermal
 interface LightInputProps {
   lightInput: LightInputType;
   computedIrradiance: number;
+  incidenceMultiplier: number;
   onChange: (input: Partial<LightInputType>) => void;
 }
 
-export function LightInput({ lightInput, computedIrradiance, onChange }: LightInputProps) {
-  const { mode, irradiance, lux, kFactor, ndFilters } = lightInput;
+export function LightInput({
+  lightInput,
+  computedIrradiance,
+  incidenceMultiplier,
+  onChange,
+}: LightInputProps) {
+  const { mode, irradiance, lux, kFactor, ndFilters, incidenceAngleDeg } = lightInput;
 
   const totalND = ndFilters.reduce((acc, nd) => acc * nd, 1);
 
@@ -168,6 +175,52 @@ export function LightInput({ lightInput, computedIrradiance, onChange }: LightIn
           </div>
         </div>
       )}
+
+      {/* Incidence Angle Section */}
+      <div className="pt-4 mt-4 border-t border-neutral-800">
+        <PresetDropdown
+          label="Incidence Angle on Object"
+          presets={incidenceAnglePresets}
+          value={incidenceAngleDeg}
+          onChange={(v) => onChange({ incidenceAngleDeg: v })}
+          unit="°"
+          min={0}
+          max={80}
+          helpText="Angle between incoming light direction and a line perpendicular to the surface. 0° = straight-on (maximum heating), 60° = half heating."
+        />
+
+        {/* Show cos(φ) multiplier */}
+        <div className="mt-3 p-3 bg-neutral-800 rounded-lg">
+          <p className="text-sm text-neutral-400">Incidence multiplier:</p>
+          <p className="text-lg font-mono text-neutral-100">
+            cos({incidenceAngleDeg}°) = {incidenceMultiplier.toFixed(3)}×
+          </p>
+          <p className="text-xs text-neutral-500 mt-1">
+            {incidenceAngleDeg === 0
+              ? "Maximum heating"
+              : `${((1 - incidenceMultiplier) * 100).toFixed(0)}% less heating than perpendicular`}
+          </p>
+        </div>
+
+        {/* Soft warning at >60° */}
+        {incidenceAngleDeg > 60 && incidenceAngleDeg <= 75 && (
+          <div className="mt-3 p-3 bg-amber-900/20 border border-amber-700/30 rounded-lg">
+            <p className="text-xs text-amber-200/80">
+              Results become very sensitive to angle; small pointing errors matter.
+            </p>
+          </div>
+        )}
+
+        {/* Hard warning at >75° */}
+        {incidenceAngleDeg > 75 && (
+          <div className="mt-3 p-3 bg-red-900/20 border border-red-700/30 rounded-lg">
+            <p className="text-xs text-red-200/80">
+              Grazing angles: real spot shape/alignment effects not modeled; expect large
+              uncertainty.
+            </p>
+          </div>
+        )}
+      </div>
     </Card>
   );
 }
