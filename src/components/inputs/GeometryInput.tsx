@@ -1,6 +1,6 @@
 import { Card, NumberInput, PresetDropdown } from "@/components/ui";
 import { materialHelperText, materialPresets } from "@/lib/presets";
-import { type SpotGeometry, calculateCoolingArea } from "@/lib/thermal";
+import { calculateCoolingArea, type SpotGeometry } from "@/lib/thermal";
 
 interface GeometryInputProps {
   areaCm2: number;

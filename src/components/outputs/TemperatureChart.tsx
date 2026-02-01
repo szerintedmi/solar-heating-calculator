@@ -1,5 +1,3 @@
-import { Card } from "@/components/ui";
-import { CELSIUS_TO_KELVIN, type TimePoint } from "@/lib/thermal";
 import { useMemo } from "react";
 import {
   CartesianGrid,
@@ -11,6 +9,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { Card } from "@/components/ui";
+import { CELSIUS_TO_KELVIN, type TimePoint } from "@/lib/thermal";
 
 interface TemperatureChartProps {
   timeSeries: TimePoint[];
@@ -88,8 +88,10 @@ export function TemperatureChart({
                 borderRadius: "8px",
                 fontSize: "12px",
               }}
-              labelFormatter={(value: number) => formatTimeLabel(value)}
-              formatter={(value: number) => [`${value.toFixed(1)}°C`, "Temperature"]}
+              labelFormatter={(value) => (typeof value === "number" ? formatTimeLabel(value) : "")}
+              formatter={(value) =>
+                typeof value === "number" ? [`${value.toFixed(1)}°C`, "Temperature"] : ["", ""]
+              }
             />
 
             {/* Equilibrium reference line */}

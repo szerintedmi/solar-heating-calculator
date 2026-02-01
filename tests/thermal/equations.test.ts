@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { STEFAN_BOLTZMANN } from "@/lib/thermal/constants";
 import {
   calculateAbsorbedPower,
@@ -8,7 +9,6 @@ import {
   luxToIrradiance,
   luxWithNDToIrradiance,
 } from "@/lib/thermal/equations";
-import { describe, expect, it } from "vitest";
 
 describe("calculateCoolingArea", () => {
   it("calculates cooling area for a square plate", () => {

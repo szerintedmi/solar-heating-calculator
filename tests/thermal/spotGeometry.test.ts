@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { SUN_HALF_ANGLE_RAD } from "@/lib/thermal/constants";
 import {
   calculateAbsorbedPower,
@@ -7,7 +8,6 @@ import {
   getIlluminatedArea,
 } from "@/lib/thermal/equations";
 import type { ThermalInputs } from "@/lib/thermal/types";
-import { describe, expect, it } from "vitest";
 
 describe("SUN_HALF_ANGLE_RAD", () => {
   it("is approximately 4.65 milliradians", () => {

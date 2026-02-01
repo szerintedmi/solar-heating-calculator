@@ -1,6 +1,6 @@
-import type { Preset } from "@/lib/presets";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import type { Preset } from "@/lib/presets";
 
 interface PresetDropdownProps {
   label: string;

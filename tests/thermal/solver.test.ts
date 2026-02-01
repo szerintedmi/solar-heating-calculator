@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { CELSIUS_TO_KELVIN } from "@/lib/thermal/constants";
 import {
   calculateEquilibrium,
@@ -5,7 +6,6 @@ import {
   solveEquilibriumTemperature,
 } from "@/lib/thermal/solver";
 import type { ThermalInputs } from "@/lib/thermal/types";
-import { describe, expect, it } from "vitest";
 
 function createDefaultInputs(overrides: Partial<ThermalInputs> = {}): ThermalInputs {
   return {

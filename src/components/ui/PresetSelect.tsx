@@ -1,5 +1,5 @@
-import type { Preset } from "@/lib/presets";
 import { useEffect, useState } from "react";
+import type { Preset } from "@/lib/presets";
 
 interface PresetSelectProps {
   label: string;

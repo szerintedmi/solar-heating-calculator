@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import {
   defaultAbsorptivity,
   defaultConvection,
@@ -10,20 +11,19 @@ import {
 } from "@/lib/presets";
 import { defaultArea, defaultMass, defaultThickness } from "@/lib/presets/geometry";
 import {
-  CELSIUS_TO_KELVIN,
   type CalculationResult,
-  type LightInput,
-  type ReflectionInput,
-  type SpotGeometry,
-  type ThermalInputs,
+  CELSIUS_TO_KELVIN,
   calculateEffectiveIlluminatedArea,
   calculateEquilibrium,
   calculateSpotGeometry,
+  type LightInput,
   luxToIrradiance,
   luxWithNDToIrradiance,
+  type ReflectionInput,
+  type SpotGeometry,
   simulateTransient,
+  type ThermalInputs,
 } from "@/lib/thermal";
-import { useMemo, useState } from "react";
 
 interface CalculatorState {
   light: LightInput;

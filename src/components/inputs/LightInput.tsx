@@ -31,6 +31,7 @@ const irradianceHelpText = (
     </a>
   </>
 );
+
 import type { LightInputMode, LightInput as LightInputType } from "@/lib/thermal";
 
 interface LightInputProps {
