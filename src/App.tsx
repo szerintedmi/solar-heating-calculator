@@ -72,7 +72,14 @@ export function App() {
 
             <CalculationExplainer />
             <Assumptions />
-            <Formulas />
+            <Formulas
+              thermalInputs={calc.thermalInputs}
+              results={calc.results}
+              light={calc.light}
+              spotGeometry={calc.spotGeometry}
+              incidenceMultiplier={calc.incidenceMultiplier}
+              displayIrradiance={calc.displayIrradiance}
+            />
           </div>
         </div>
 
