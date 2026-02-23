@@ -2,15 +2,25 @@
 
 An interactive calculator that estimates how hot objects get under light exposure. Calculates equilibrium temperature, temperature-over-time curves, and heat loss breakdown.
 
-Built for curious minds who want to understand thermal physics — not for precision engineering.
+**[Try it live](https://szerintedmi.github.io/solar-heating-calculator/)**
 
 ## Features
 
 - **Three light input modes**: Direct irradiance (W/m²), lux conversion, lux with ND filter compensation
 - **Presets for common materials**: Absorptivity, emissivity, heat capacity, convection conditions
 - **Real-time results**: Equilibrium temperature, power balance, time to reach temperature milestones
+
+<p align="center"><img src="docs/images/temperature_results.png" alt="Temperature results and heat loss breakdown" width="420"></p>
+
 - **Temperature vs time chart**: Visual curve showing heating progression
-- **Educational explanations**: Expandable sections explaining the physics
+
+<p align="center"><img src="docs/images/temperature_vs_time.png" alt="Temperature vs time chart" width="500"></p>
+
+- **Sensitivity analysis**: Latin Hypercube Sampling to explore how parameter uncertainty affects results, with parameter sweep and distribution charts
+
+<p align="center"><img src="docs/images/sensitivity_results.png" alt="Sensitivity analysis results" width="420"></p>
+
+- **Educational explanations**: Expandable sections explaining the physics and the formulas
 
 ## Quick Start
 
