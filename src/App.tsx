@@ -6,7 +6,7 @@ import {
   SurfaceInput,
 } from "@/components/inputs";
 import { Assumptions, CalculationExplainer, Formulas, Header } from "@/components/layout";
-import { ResultsDisplay, TemperatureChart } from "@/components/outputs";
+import { ResultsDisplay, SensitivityAnalysis, TemperatureChart } from "@/components/outputs";
 import { useCalculator } from "@/hooks/useCalculator";
 
 export function App() {
@@ -68,6 +68,18 @@ export function App() {
               timeSeries={calc.results.transient.timeSeries}
               equilibriumTemp={calc.results.equilibrium.temperature}
               ambientTemp={calc.thermalInputs.ambientTemp}
+            />
+
+            <SensitivityAnalysis
+              thermalInputs={calc.thermalInputs}
+              baseIrradiance={calc.computedIrradiance / calc.incidenceMultiplier}
+              reflectionEnabled={calc.light.reflection.enabled}
+              currentReflectance={calc.light.reflection.reflectance}
+              currentIncidenceAngleDeg={calc.light.incidenceAngleDeg}
+              currentAreaCm2={calc.areaCm2}
+              currentThicknessMm={calc.thicknessMm}
+              currentMassGrams={calc.massGrams}
+              displayIrradiance={calc.displayIrradiance}
             />
 
             <CalculationExplainer />
