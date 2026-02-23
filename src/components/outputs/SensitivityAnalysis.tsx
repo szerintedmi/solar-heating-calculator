@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Card } from "@/components/ui";
 import { useSensitivity } from "@/hooks/useSensitivity";
 import type { ParamConfig } from "@/lib/sensitivity/types";
 import type { ThermalInputs } from "@/lib/thermal";
@@ -89,111 +90,121 @@ export function SensitivityAnalysis({
   const equilibriumParams = sensitivity.paramConfigs.filter((p) => p.group === "equilibrium");
   const transientOnlyParams = sensitivity.paramConfigs.filter((p) => p.group === "transient-only");
 
-  return (
-    <div className="mt-6">
+  // Collapsed state: compact clickable card
+  if (!isOpen) {
+    return (
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-200 transition-colors"
+        onClick={() => setIsOpen(true)}
+        className="card hover:border-neutral-700 transition-colors cursor-pointer text-left w-full"
       >
-        <svg
-          className={`w-4 h-4 transition-transform ${isOpen ? "rotate-90" : ""}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-        Sensitivity Analysis
-      </button>
-
-      {isOpen && (
-        <div className="mt-4 p-5 bg-neutral-850 border border-neutral-800 rounded-xl space-y-6">
-          {/* Global controls */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <label className="text-sm text-neutral-300" htmlFor="range-pct">
-                ±
-              </label>
-              <input
-                id="range-pct"
-                type="range"
-                min={5}
-                max={80}
-                value={sensitivity.rangePct}
-                onChange={(e) => sensitivity.setRangePct(Number(e.target.value))}
-                className="w-24 accent-yellow-500"
-              />
-              <span className="text-sm font-mono text-neutral-400 w-8">
-                {sensitivity.rangePct}%
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <label className="text-sm text-neutral-300" htmlFor="samples">
-                Samples
-              </label>
-              <input
-                id="samples"
-                type="range"
-                min={20}
-                max={500}
-                step={10}
-                value={sensitivity.samples}
-                onChange={(e) => sensitivity.setSamples(Number(e.target.value))}
-                className="w-24 accent-yellow-500"
-              />
-              <span className="text-sm font-mono text-neutral-400 w-8 text-right">
-                {sensitivity.samples}
-              </span>
-            </div>
-          </div>
-
-          {/* Equilibrium parameter sweeps */}
-          <div className="space-y-3">
-            {equilibriumParams.map((param) => (
-              <ParamRow
-                key={param.key}
-                param={param}
-                onToggle={() => sensitivity.toggleParam(param.key)}
-                sweepData={sensitivity.sweepResults[param.key]}
-              />
-            ))}
-          </div>
-
-          {/* Transient-only params */}
-          <div className="space-y-3">
-            <p className="text-xs text-neutral-500">
-              These parameters affect heating rate only, not final temperature
+        <div className="flex items-center gap-3">
+          <div className="text-xl text-neutral-500">+</div>
+          <div>
+            <h2 className="card-title mb-0">Sensitivity Analysis</h2>
+            <p className="text-sm text-neutral-500">
+              Explore how parameter variations affect equilibrium and transient temperatures
             </p>
-            {transientOnlyParams.map((param) => (
-              <ParamRow
-                key={param.key}
-                param={param}
-                onToggle={() => sensitivity.toggleParam(param.key)}
-              />
-            ))}
           </div>
-
-          {/* Combined uncertainty distribution */}
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-neutral-200">
-              Combined uncertainty distribution
-            </h4>
-            <p className="text-xs text-neutral-500">
-              {sensitivity.samples} random samples varying all parameters simultaneously (Latin
-              Hypercube)
-            </p>
-            <DistributionChart temps={sensitivity.distributionTemps} />
-          </div>
-
-          {/* Transient uncertainty */}
-          <TransientOverlaySection
-            transientSamples={sensitivity.transientSamples}
-            isStale={sensitivity.isTransientStale}
-          />
         </div>
-      )}
-    </div>
+      </button>
+    );
+  }
+
+  // Expanded state: full Card matching Temperature vs Time layout
+  return (
+    <Card title="Sensitivity Analysis">
+      <div className="space-y-6">
+        {/* Global controls */}
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-neutral-300" htmlFor="range-pct">
+              ±
+            </label>
+            <input
+              id="range-pct"
+              type="range"
+              min={5}
+              max={80}
+              value={sensitivity.rangePct}
+              onChange={(e) => sensitivity.setRangePct(Number(e.target.value))}
+              className="w-24 accent-yellow-500"
+            />
+            <span className="text-sm font-mono text-neutral-400 w-8">{sensitivity.rangePct}%</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-neutral-300" htmlFor="samples">
+              Samples
+            </label>
+            <input
+              id="samples"
+              type="range"
+              min={20}
+              max={500}
+              step={10}
+              value={sensitivity.samples}
+              onChange={(e) => sensitivity.setSamples(Number(e.target.value))}
+              className="w-24 accent-yellow-500"
+            />
+            <span className="text-sm font-mono text-neutral-400 w-8 text-right">
+              {sensitivity.samples}
+            </span>
+          </div>
+        </div>
+
+        {/* Equilibrium parameter sweeps */}
+        <div className="space-y-3">
+          {equilibriumParams.map((param) => (
+            <ParamRow
+              key={param.key}
+              param={param}
+              onToggle={() => sensitivity.toggleParam(param.key)}
+              sweepData={sensitivity.sweepResults[param.key]}
+            />
+          ))}
+        </div>
+
+        {/* Transient-only params */}
+        <div className="space-y-3">
+          <p className="text-xs text-neutral-500">
+            These parameters affect heating rate only, not final temperature
+          </p>
+          {transientOnlyParams.map((param) => (
+            <ParamRow
+              key={param.key}
+              param={param}
+              onToggle={() => sensitivity.toggleParam(param.key)}
+            />
+          ))}
+        </div>
+
+        {/* Combined uncertainty distribution */}
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium text-neutral-200">
+            Combined uncertainty distribution
+          </h4>
+          <p className="text-xs text-neutral-500">
+            {sensitivity.samples} random samples varying all parameters simultaneously (Latin
+            Hypercube)
+          </p>
+          <DistributionChart temps={sensitivity.distributionTemps} />
+        </div>
+
+        {/* Transient uncertainty */}
+        <TransientOverlaySection
+          transientSamples={sensitivity.transientSamples}
+          isStale={sensitivity.isTransientStale}
+        />
+
+        {/* Collapse button */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="text-sm text-neutral-500 hover:text-neutral-300 transition-colors"
+        >
+          ← Collapse
+        </button>
+      </div>
+    </Card>
   );
 }
